@@ -9,13 +9,18 @@
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "wrangler pages dev ./build/client",
+    "generate": "drizzle-kit generate:sqlite --schema=db/schemas/*",
+    "up": "drizzle-kit up:sqlite --schema=db/schemas/*",
     "typecheck": "tsc",
     "typegen": "wrangler types"
   },
   "dependencies": {
+    "@paralleldrive/cuid2": "github:paralleldrive/cuid2",
     "@remix-run/cloudflare": "^2.8.1",
     "@remix-run/cloudflare-pages": "^2.8.1",
     "@remix-run/react": "^2.8.1",
+    "drizzle-kit": "^0.20.14",
+    "drizzle-orm": "^0.30.7",
     "isbot": "^4.1.0",
     "miniflare": "^3.20231030.4",
     "react": "^18.2.0",
