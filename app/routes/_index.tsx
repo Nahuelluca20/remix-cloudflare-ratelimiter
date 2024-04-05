@@ -29,7 +29,9 @@ export default function Index() {
   console.log(resourceList);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix (with Vite and Cloudflare)</h1>
+      <h1 className="text-red-600">
+        Welcome to Remix (with Vite and Cloudflare)
+      </h1>
       <ul>
         <li>
           <a
