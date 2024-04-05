@@ -4,6 +4,7 @@ import {
   type MetaFunction,
 } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
+import { getNotes } from "./queries";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,17 +17,19 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const { MY_KV } = context.cloudflare.env;
-  return json({ MY_KV });
+  const resourceList = await getNotes(context.cloudflare.env.DB);
+  return json({
+    resourceList,
+  });
 }
 
 export default function Index() {
-  const { MY_KV } = useLoaderData<typeof loader>();
-
+  const resourceList = useLoaderData<typeof loader>();
+  console.log();
+  console.log(resourceList);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Remix (with Vite and Cloudflare)</h1>
-      <h2>{MY_KV}</h2>
       <ul>
         <li>
           <a

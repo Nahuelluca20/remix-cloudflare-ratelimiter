@@ -2,9 +2,8 @@
   "out": "drizzle",
   "driver": "d1",
   "dbCredentials": {
-    "wranglerConfigPath": "./wrangler.toml",
-    "dbName": "podcast-db",
-    "local": true
+    "wranglerConfigPath": "wrangler.toml",
+    "dbName": "podcast-db"
   },
   "schema": "db/schemas/*"
 }
