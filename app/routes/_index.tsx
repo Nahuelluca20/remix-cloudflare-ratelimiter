@@ -17,11 +17,11 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const { MY_KV } = context.cloudflare.env;
-  return MY_KV;
+  return json({ MY_KV });
 }
 
 export default function Index() {
-  const MY_KV = useLoaderData();
+  const { MY_KV } = useLoaderData<typeof loader>();
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
