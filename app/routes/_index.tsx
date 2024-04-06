@@ -5,6 +5,7 @@ import {
 } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { getNotes } from "./queries";
+import { Button } from "~/Button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -25,12 +26,12 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export default function Index() {
   const resourceList = useLoaderData<typeof loader>();
-  console.log();
+
   console.log(resourceList);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1 className="text-red-600">
-        Welcome to Remix (with Vite and Cloudflare)
+        Welcome to Remix (with Vite and Cloudflare)dasd
       </h1>
       <ul>
         <li>
