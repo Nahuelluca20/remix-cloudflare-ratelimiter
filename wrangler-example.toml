@@ -1,0 +1,19 @@
+main = "build/server/index.js"
+name = "podcast-project"
+compatibility_date = "2023-05-04"
+node_compat = true
+
+[[unsafe.bindings]]
+name = "RATE_LIMITER"
+type = "ratelimit"
+namespace_id = "2332100" # An identifier unique to your Cloudflare account
+# Limit: the number of tokens allowed within a given period, in a single Cloudflare location
+# Period: the duration of the period, in seconds. Must be either 60 or 10
+simple = { limit = 5, period = 60 }
+
+[[d1_databases]]
+binding = "DB"                     # i.e. available in your Worker on env.DB
+database_name = "name-db"
+database_id = "database-id-sarasa"
+preview_database_id = "DB"
+migrations_dir = "drizzle"

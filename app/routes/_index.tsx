@@ -5,7 +5,7 @@ import {
 } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { getNotes } from "./queries";
-import { Button } from "~/Button";
+// import { Button } from "~/Button";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,15 +17,26 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({ context }: LoaderFunctionArgs) {
-  const resourceList = await getNotes(context.cloudflare.env.DB);
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  const { pathname } = new URL(request.url);
+  const { MY_RATE_LIMITER, DB } = context.cloudflare.env;
+
+  const { success } = await MY_RATE_LIMITER.limit({
+    key: pathname,
+  });
+
+  console.log(success);
+
+  const resourceList = !success ? [] : await getNotes(DB);
+
   return json({
+    success,
     resourceList,
   });
 }
 
 export default function Index() {
-  const resourceList = useLoaderData<typeof loader>();
+  const { resourceList, success } = useLoaderData<typeof loader>();
 
   console.log(resourceList);
   return (
@@ -49,6 +60,7 @@ export default function Index() {
           </a>
         </li>
       </ul>
+      {!success && <p>429 Failure – you exceeded rate limit</p>}
     </div>
   );
 }
