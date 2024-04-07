@@ -2,8 +2,35 @@ import { DialogTrigger, Modal, ModalOverlay } from "react-aria-components";
 import { AlertDialog } from "~/components/ui/AlertDialog";
 import { Button } from "../ui/Button";
 import { Plus } from "lucide-react";
+import { useRemixForm } from "remix-hook-form";
+import { Form } from "@remix-run/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as zod from "zod";
+
+const noteSchema = zod.object({
+  title: zod.string().min(1).max(20),
+  content: zod.string().email().min(1).max(60),
+  description: zod.string().min(1).max(30),
+  tags: zod.string().min(1).max(30),
+});
+
+type FormData = zod.infer<typeof noteSchema>;
+
+const resolver = zodResolver(noteSchema);
+
+const inputStyle =
+  "mt-[2px] border-2 rounded-md px-2 py-1.5 flex-1 min-w-0 outline outline-0 bg-white dark:bg-zinc-900 text-sm text-gray-800 dark:text-zinc-200 disabled:text-gray-200 dark:disabled:text-zinc-600";
 
 export default function AddNote() {
+  const {
+    handleSubmit,
+    formState: { errors },
+    register,
+  } = useRemixForm<FormData>({
+    mode: "onSubmit",
+    resolver,
+  });
+  console.log(errors);
   return (
     <div>
       <DialogTrigger>
@@ -29,14 +56,61 @@ export default function AddNote() {
             ${isExiting ? "animate-out zoom-out-95 ease-in duration-200" : ""}
           `}
           >
-            <AlertDialog
-              actionLabel="Delete"
-              onAction={function Ya() {}}
-              title="Delete folder"
-              variant="destructive"
-            >
-              Are you sure you want to delete? All contents will be permanently
-              destroyed.
+            <AlertDialog actionLabel="Delete" title="Add Note" variant="info">
+              Complete form to add a new note.
+              <Form
+                action="/action/add-note"
+                method="post"
+                className="space-y-2 mt-4"
+                onSubmit={handleSubmit}
+              >
+                <div>
+                  <label className="flex flex-col">
+                    Title
+                    <input
+                      className={inputStyle}
+                      type="text"
+                      {...register("title")}
+                    />
+                    {errors.title && <p>{errors.title.message}</p>}
+                  </label>
+                </div>
+                <div>
+                  <label className="flex flex-col">
+                    Description
+                    <input
+                      className={inputStyle}
+                      type="description"
+                      {...register("description")}
+                    />
+                    {errors.description && <p>{errors.description.message}</p>}
+                  </label>
+                </div>
+                <div>
+                  <label className="flex flex-col">
+                    Content
+                    <input
+                      className={inputStyle}
+                      type="content"
+                      {...register("content")}
+                    />
+                    {errors.content && <p>{errors.content.message}</p>}
+                  </label>
+                </div>
+                <div>
+                  <label className="flex flex-col">
+                    Tags
+                    <input
+                      className={inputStyle}
+                      type="tags"
+                      {...register("tags")}
+                    />
+                    {errors.tags && <p>{errors.tags.message}</p>}
+                  </label>
+                </div>
+                <button type="submit">Submit</button>
+              </Form>
+              <div className="flex justify-end gap-2 mt-4">dasds</div>
             </AlertDialog>
           </Modal>
         </ModalOverlay>
