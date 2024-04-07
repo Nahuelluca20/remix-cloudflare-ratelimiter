@@ -3,10 +3,11 @@ import {
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { getNotes } from "./queries";
 import { Button } from "~/Button";
 import CardNote from "~/components/cards/card-note";
+import { Github, NotebookText } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -26,8 +27,6 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
     key: pathname,
   });
 
-  console.log(success);
-
   const resourceList = !success ? [] : await getNotes(DB);
 
   return json({
@@ -39,17 +38,33 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 export default function Index() {
   const { resourceList, success } = useLoaderData<typeof loader>();
 
-  console.log(resourceList);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1 className="text-red-600">
+      <h1 className="text-2xl font-bold text-center">
         Welcome to Remix (with Vite and Cloudflare)
       </h1>
-      <Button isDisabled variant="primary">
-        Get Notes
-      </Button>
-      {success && resourceList.length > 0 && (
-        <ul>
+      <div className="gap-2 justify-center flex w-full mt-4">
+        <Link to={"https://nahuel-dev.pages.dev/blog"} target="__blanck">
+          <Button
+            className="flex items-center gap-1 py-1 px-2"
+            variant="primary"
+          >
+            <NotebookText className="h-4 w-4" />
+            View Blog
+          </Button>
+        </Link>
+        <Link to={"https://github.com/Nahuelluca20"} target="__blanck">
+          <Button
+            variant="secondary"
+            className="flex items-center gap-1 py-1 px-2"
+          >
+            <Github className="h-4 w-4" />
+            Code
+          </Button>
+        </Link>
+      </div>
+      {!success && resourceList.length > 0 && (
+        <ul className="mt-10">
           {resourceList.map((note) => (
             <li key={note.id}>
               <CardNote
@@ -62,7 +77,11 @@ export default function Index() {
           ))}
         </ul>
       )}
-      {!success && <p>429 Failure – you exceeded rate limit</p>}
+      {success && (
+        <p className="text-center text-2xl mt-10 font-bold text-red-500">
+          429 Failure – you exceeded rate limit
+        </p>
+      )}
     </div>
   );
 }
