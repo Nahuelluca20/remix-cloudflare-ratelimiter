@@ -4,7 +4,7 @@ import {
   ButtonProps as RACButtonProps,
 } from "react-aria-components";
 import { tv } from "tailwind-variants";
-import { focusRing } from "./components/ui/utils";
+import { focusRing } from "./utils";
 
 export interface ButtonProps extends RACButtonProps {
   variant?: "primary" | "secondary" | "destructive" | "icon";

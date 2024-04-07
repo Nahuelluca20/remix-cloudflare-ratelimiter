@@ -5,9 +5,9 @@ import {
 } from "@remix-run/cloudflare";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getNotes } from "./queries";
-import { Button } from "~/Button";
+import { Button } from "~/components/ui/Button";
 import CardNote from "~/components/cards/card-note";
-import { Github, NotebookText } from "lucide-react";
+import { Github, NotebookText, Plus } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -63,25 +63,34 @@ export default function Index() {
           </Button>
         </Link>
       </div>
-      {!success && resourceList.length > 0 && (
-        <ul className="mt-10">
-          {resourceList.map((note) => (
-            <li key={note.id}>
-              <CardNote
-                title={note.title || ""}
-                tags={note.tags || ""}
-                description={note.description || ""}
-                content={note.content || ""}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-      {success && (
-        <p className="text-center text-2xl mt-10 font-bold text-red-500">
-          429 Failure – you exceeded rate limit
-        </p>
-      )}
+      <section className="mt-10 space-y-10">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-center">Notes</h2>
+          <Button className="px-2 py-1 flex items-center gap-[2px]">
+            Add Note
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+        {success && resourceList.length > 0 && (
+          <ul>
+            {resourceList.map((note) => (
+              <li key={note.id}>
+                <CardNote
+                  title={note.title || ""}
+                  tags={note.tags || ""}
+                  description={note.description || ""}
+                  content={note.content || ""}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+        {!success && (
+          <p className="text-center text-2xl font-bold text-red-500">
+            429 Failure – you exceeded rate limit
+          </p>
+        )}
+      </section>
     </div>
   );
 }
