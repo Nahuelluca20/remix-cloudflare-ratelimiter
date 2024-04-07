@@ -1,23 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* 
-@media (min-resolution: 200dpi) {
-  html {
-    font-size: 18px;
-    color-scheme: dark;
-  }
 
-  .text-sm {
-    /* ensure minimum font size of 16px */
-/* font-size: 0.9rem; */
-/* } */
-/* } */
-
-/* body { */
-/* @apply bg-white dark:bg-zinc-900; */
-/* color-scheme: dark; */
-/* } */
 html {
-  /* color-scheme: normal; */
+  font-size: 18px;
+}
+
+@media (min-resolution: 200dpi) {
+  .text-sm {
+    font-size: 0.9rem;
+  }
+}
+
+body {
+  @apply bg-white dark:bg-zinc-900;
+  color-scheme: dark light;
 }
