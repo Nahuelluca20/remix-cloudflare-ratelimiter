@@ -7,7 +7,9 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { getNotes } from "./queries";
 import { Button } from "~/components/ui/Button";
 import CardNote from "~/components/cards/card-note";
-import { Github, NotebookText, Plus } from "lucide-react";
+import { Github, NotebookText } from "lucide-react";
+import { Heading } from "react-aria-components";
+import AddNote from "~/components/modals/add-note";
 
 export const meta: MetaFunction = () => {
   return [
@@ -40,9 +42,9 @@ export default function Index() {
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1 className="text-2xl font-bold text-center">
+      <Heading className="text-2xl font-bold text-center">
         Welcome to Remix (with Vite and Cloudflare)
-      </h1>
+      </Heading>
       <div className="gap-2 justify-center flex w-full mt-4">
         <Link to={"https://nahuel-dev.pages.dev/blog"} target="__blanck">
           <Button
@@ -66,10 +68,8 @@ export default function Index() {
       <section className="mt-10 space-y-10">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-center">Notes</h2>
-          <Button className="px-2 py-1 flex items-center gap-[2px]">
-            Add Note
-            <Plus className="h-4 w-4" />
-          </Button>
+
+          <AddNote />
         </div>
         {success && resourceList.length > 0 && (
           <ul>
