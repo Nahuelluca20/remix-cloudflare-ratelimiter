@@ -15,6 +15,7 @@ import {
   ThemeProvider,
   useTheme,
 } from "remix-themes";
+import Header from "./components/header";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -41,7 +42,8 @@ function App() {
         <Meta />
         <Links />
       </head>
-      <body className="max-w-[1200px] w-full mx-auto mt-20 bg-foreground">
+      <body className="px-5 max-w-[1200px] w-full mx-auto mt-10 bg-foreground">
+        <Header />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

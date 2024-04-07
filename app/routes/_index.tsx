@@ -3,10 +3,10 @@ import {
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/cloudflare";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { getNotes } from "./queries";
 import { Button } from "~/Button";
-import ModeToggle from "~/components/buttons/mode-toggle";
+import CardNote from "~/components/cards/card-note";
 
 export const meta: MetaFunction = () => {
   return [
@@ -45,11 +45,23 @@ export default function Index() {
       <h1 className="text-red-600">
         Welcome to Remix (with Vite and Cloudflare)
       </h1>
-      <Link to="/sarasa">About</Link>
       <Button isDisabled variant="primary">
         Get Notes
       </Button>
-      <ModeToggle />
+      {success && resourceList.length > 0 && (
+        <ul>
+          {resourceList.map((note) => (
+            <li key={note.id}>
+              <CardNote
+                title={note.title || ""}
+                tags={note.tags || ""}
+                description={note.description || ""}
+                content={note.content || ""}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
       {!success && <p>429 Failure – you exceeded rate limit</p>}
     </div>
   );
