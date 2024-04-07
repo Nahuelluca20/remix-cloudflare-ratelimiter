@@ -9,7 +9,7 @@ import * as zod from "zod";
 
 const noteSchema = zod.object({
   title: zod.string().min(1).max(20),
-  content: zod.string().email().min(1).max(60),
+  content: zod.string().min(1).max(60),
   description: zod.string().min(1).max(30),
   tags: zod.string().min(1).max(30),
 });
@@ -27,9 +27,10 @@ export default function AddNote() {
     formState: { errors },
     register,
   } = useRemixForm<FormData>({
-    mode: "onSubmit",
+    mode: "onChange",
     resolver,
   });
+
   console.log(errors);
   return (
     <div>
@@ -56,13 +57,17 @@ export default function AddNote() {
             ${isExiting ? "animate-out zoom-out-95 ease-in duration-200" : ""}
           `}
           >
-            <AlertDialog actionLabel="Delete" title="Add Note" variant="info">
+            <AlertDialog
+              actionLabel="Add Note"
+              title="Add Note"
+              variant="info"
+              onAction={() => handleSubmit()}
+            >
               Complete form to add a new note.
               <Form
-                action="/action/add-note"
                 method="post"
                 className="space-y-2 mt-4"
-                onSubmit={handleSubmit}
+                onSubmit={() => handleSubmit()}
               >
                 <div>
                   <label className="flex flex-col">
@@ -72,7 +77,9 @@ export default function AddNote() {
                       type="text"
                       {...register("title")}
                     />
-                    {errors.title && <p>{errors.title.message}</p>}
+                    {errors?.title && (
+                      <p className="text-red-600">{errors?.title.message}</p>
+                    )}
                   </label>
                 </div>
                 <div>
@@ -83,7 +90,11 @@ export default function AddNote() {
                       type="description"
                       {...register("description")}
                     />
-                    {errors.description && <p>{errors.description.message}</p>}
+                    {errors.description && (
+                      <p className="text-red-600">
+                        {errors.description.message}
+                      </p>
+                    )}
                   </label>
                 </div>
                 <div>
@@ -94,7 +105,9 @@ export default function AddNote() {
                       type="content"
                       {...register("content")}
                     />
-                    {errors.content && <p>{errors.content.message}</p>}
+                    {errors.content && (
+                      <p className="text-red-600">{errors.content.message}</p>
+                    )}
                   </label>
                 </div>
                 <div>
@@ -105,12 +118,12 @@ export default function AddNote() {
                       type="tags"
                       {...register("tags")}
                     />
-                    {errors.tags && <p>{errors.tags.message}</p>}
+                    {errors.tags && (
+                      <p className="text-red-600">{errors.tags.message}</p>
+                    )}
                   </label>
                 </div>
-                <button type="submit">Submit</button>
               </Form>
-              <div className="flex justify-end gap-2 mt-4">dasds</div>
             </AlertDialog>
           </Modal>
         </ModalOverlay>

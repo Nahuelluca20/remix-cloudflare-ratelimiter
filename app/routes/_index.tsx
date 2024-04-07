@@ -1,15 +1,19 @@
 import {
+  ActionFunctionArgs,
   json,
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/cloudflare";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useActionData, useLoaderData } from "@remix-run/react";
 import { getNotes } from "./queries";
 import { Button } from "~/components/ui/Button";
 import CardNote from "~/components/cards/card-note";
 import { Github, NotebookText } from "lucide-react";
 import { Heading } from "react-aria-components";
 import AddNote from "~/components/modals/add-note";
+import { getValidatedFormData } from "remix-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as zod from "zod";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,9 +41,36 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   });
 }
 
+const noteSchema = zod.object({
+  title: zod.string().min(1).max(20),
+  content: zod.string().min(1).max(60),
+  description: zod.string().min(1).max(30),
+  tags: zod.string().min(1).max(30),
+});
+
+type FormData = zod.infer<typeof noteSchema>;
+
+const resolver = zodResolver(noteSchema);
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const {
+    errors,
+    data,
+    receivedValues: defaultValues,
+  } = await getValidatedFormData<FormData>(request, resolver);
+  if (errors) {
+    // The keys "errors" and "defaultValue" are picked up automatically by useRemixForm
+    return json({ errors, defaultValues });
+  }
+
+  // Do something with the data
+  return json(data);
+};
+
 export default function Index() {
   const { resourceList, success } = useLoaderData<typeof loader>();
-
+  const data = useActionData();
+  console.log("action data:", data);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <Heading className="text-2xl font-bold text-center">
