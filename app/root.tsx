@@ -1,4 +1,5 @@
-import { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
+import { LoaderFunction } from "@remix-run/cloudflare";
+import type { LinksFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,

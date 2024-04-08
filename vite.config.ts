@@ -10,7 +10,7 @@ export default defineConfig({
     tsconfigPaths(),
     remixCloudflareDevProxy(),
     remix({
-      ignoredRouteFiles: ["**/*server.ts"],
+      ignoredRouteFiles: ["**/*server.ts", "**/*.css"],
     }),
     tsconfigPaths(),
   ],
