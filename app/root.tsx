@@ -7,7 +7,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import stylesheet from "~/tailwind.css";
+import stylesheet from "~/tailwind.css?url";
 import { themeSessionResolver } from "./routes/sessions.server";
 import {
   PreventFlashOnWrongTheme,
