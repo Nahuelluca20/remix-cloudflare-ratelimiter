@@ -27,14 +27,14 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
   // const { pathname } = new URL(request.url);
-  const { MY_RATE_LIMITER, DB } = context.cloudflare.env;
+  // const { MY_RATE_LIMITER, DB } = context.cloudflare.env;
 
   // const { success } = await MY_RATE_LIMITER.limit({
   //   key: pathname,
   // });
 
   // const resourceList = !success ? [] : await getNotes(DB);
-  const resourceList = await getNotes(DB);
+  const resourceList = await getNotes(context.cloudflare.env.DB);
 
   return json({
     // success,
