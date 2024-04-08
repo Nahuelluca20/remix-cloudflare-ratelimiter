@@ -38,7 +38,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
   const resourceList = await getNotes(context.cloudflare.env.DB);
 
   return json({
-    success,
+    // success,
     resourceList,
   });
 }
