@@ -25,23 +25,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader({ request, context }: LoaderFunctionArgs) {
-  const { pathname } = new URL(request.url);
-  const { MY_RATE_LIMITER, DB } = context.cloudflare.env;
-
-  const { success } = await MY_RATE_LIMITER.limit({
-    key: pathname,
-  });
-
-  const resourceList = !success ? [] : await getNotes(DB);
-  // const resourceList = await getNotes(context.cloudflare.env.DB);
-
-  return json({
-    success,
-    resourceList,
-  });
-}
-
 const noteSchema = zod.object({
   title: zod.string().min(1).max(20),
   content: zod.string().min(1).max(60),
@@ -52,6 +35,23 @@ const noteSchema = zod.object({
 type FormData = zod.infer<typeof noteSchema>;
 
 const resolver = zodResolver(noteSchema);
+
+export async function loader({ request, context }: LoaderFunctionArgs) {
+  // const { pathname } = new URL(request.url);
+  // const { MY_RATE_LIMITER, DB } = context.cloudflare.env;
+
+  // const { success } = await MY_RATE_LIMITER.limit({
+  //   key: pathname,
+  // });
+
+  // const resourceList = !success ? [] : await getNotes(DB);
+  const resourceList = await getNotes(context.cloudflare.env.DB);
+
+  return json({
+    // success,
+    resourceList,
+  });
+}
 
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   const {
@@ -68,7 +68,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
 };
 
 export default function Index() {
-  const { resourceList, success } = useLoaderData<typeof loader>();
+  const { resourceList } = useLoaderData<typeof loader>();
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <Heading className="text-2xl font-bold text-center">
@@ -100,7 +100,7 @@ export default function Index() {
 
           <AddNote />
         </div>
-        {success && resourceList.length > 0 && (
+        {/* {success && resourceList.length > 0 && (
           <ul className="space-y-2">
             {resourceList.map((note) => (
               <li key={note.id}>
@@ -118,7 +118,7 @@ export default function Index() {
           <p className="text-center text-2xl font-bold text-red-500">
             429 Failure – you exceeded rate limit
           </p>
-        )}
+        )} */}
       </section>
     </div>
   );
