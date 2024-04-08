@@ -5,7 +5,7 @@ import {
   type MetaFunction,
 } from "@remix-run/cloudflare";
 import { Link, useActionData, useLoaderData } from "@remix-run/react";
-import { getNotes } from "./queries";
+import { getNotes, postNote } from "./queries";
 import { Button } from "~/components/ui/Button";
 import CardNote from "~/components/cards/card-note";
 import { Github, NotebookText } from "lucide-react";
@@ -52,7 +52,7 @@ type FormData = zod.infer<typeof noteSchema>;
 
 const resolver = zodResolver(noteSchema);
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, context }: ActionFunctionArgs) => {
   const {
     errors,
     data,
@@ -61,16 +61,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (errors) {
     // The keys "errors" and "defaultValue" are picked up automatically by useRemixForm
     return json({ errors, defaultValues });
+  } else {
+    return await postNote(context.cloudflare.env.DB, data);
   }
-
-  // Do something with the data
-  return json(data);
 };
 
 export default function Index() {
   const { resourceList, success } = useLoaderData<typeof loader>();
-  const data = useActionData();
-  console.log("action data:", data);
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <Heading className="text-2xl font-bold text-center">
@@ -103,7 +100,7 @@ export default function Index() {
           <AddNote />
         </div>
         {success && resourceList.length > 0 && (
-          <ul>
+          <ul className="space-y-2">
             {resourceList.map((note) => (
               <li key={note.id}>
                 <CardNote
