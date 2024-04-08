@@ -4,7 +4,7 @@ import {
   LoaderFunctionArgs,
   type MetaFunction,
 } from "@remix-run/cloudflare";
-import { Link, useActionData, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { getNotes, postNote } from "./queries";
 import { Button } from "~/components/ui/Button";
 import CardNote from "~/components/cards/card-note";
