@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build tailwindcss -o ./app/tailwind.css",
+    "build": "remix vite:build",
     "build:tailwind": "tailwindcss -o ./app/tailwind.css",
     "deploy": "wrangler pages deploy ./build/client",
     "dev": "remix vite:dev",
