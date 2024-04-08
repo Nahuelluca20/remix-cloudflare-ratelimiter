@@ -9,7 +9,9 @@ import { type PlatformProxy } from "wrangler";
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Env {
   DB: D1Database;
-  MY_RATE_LIMITER: any;
+  MY_RATE_LIMITER: {
+    limit: (args: { key: string }) => Promise<{ success: boolean }>;
+  };
   MY_KV: string;
 }
 
